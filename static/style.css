@@ -1,0 +1,45 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+}
+
+nav {
+    background: black;
+    padding: 10px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-right: 15px;
+}
+
+.container {
+    padding: 20px;
+}
+
+input, button {
+    display: block;
+    width: 250px;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+button {
+    background: black;
+    color: white;
+    cursor: pointer;
+}
+
+.alert {
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.success {
+    background: lightgreen;
+}
+
+.danger {
+    background: pink;
+}

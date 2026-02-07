@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<h2>Dashboard</h2>
+<p>Welcome, <b>{{ username }}</b> 👋</p>
+
+<hr>
+
+<h3>Summary</h3>
+<p><b>Total Spent:</b> ₹ {{ total_spent }}</p>
+<p><b>Total Entries:</b> {{ total_entries }}</p>
+
+<hr>
+
+<h3>Category Wise Spending</h3>
+
+{% if category_data|length == 0 %}
+    <p>No expenses yet.</p>
+{% else %}
+
+<div style="width:300px; height:300px; margin:auto;">
+    <canvas id="expenseChart"></canvas>
+</div>
+
+<script>
+    const labels = [
+        {% for c in category_data %}
+            "{{ c[0] }}",
+        {% endfor %}
+    ];
+
+    const data = [
+        {% for c in category_data %}
+            {{ c[1] }},
+        {% endfor %}
+    ];
+
+    const ctx = document.getElementById('expenseChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+</script>
+
+<table border="1" cellpadding="10" style="margin:auto;">
+    <tr>
+        <th>Category</th>
+        <th>Total Amount</th>
+    </tr>
+    {% for c in category_data %}
+    <tr>
+        <td>{{ c[0] }}</td>
+        <td>₹ {{ c[1] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endif %}
+
+<hr>
+
+<h3>Monthly Summary</h3>
+
+{% if monthly_data|length == 0 %}
+    <p>No monthly data available.</p>
+{% else %}
+<table border="1" cellpadding="10" style="margin:auto;">
+    <tr>
+        <th>Month</th>
+        <th>Total Amount</th>
+    </tr>
+    {% for m in monthly_data %}
+    <tr>
+        <td>{{ m[0] }}</td>
+        <td>₹ {{ m[1] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+<hr>
+
+<h3>Filter by Category</h3>
+
+<form method="get" action="/dashboard">
+    <select name="category">
+        <option value="">All Categories</option>
+        {% for c in category_data %}
+            <option value="{{ c[0] }}"
+                {% if selected_category == c[0] %}selected{% endif %}>
+                {{ c[0] }}
+            </option>
+        {% endfor %}
+    </select>
+    <button type="submit">Apply</button>
+</form>
+
+<hr>
+
+<h3>Latest 5 Expenses</h3>
+
+{% if latest_expenses|length == 0 %}
+    <p>No expenses yet.</p>
+{% else %}
+
+<a href="/export">
+    <button>⬇️ Download CSV</button>
+</a>
+
+<table border="1" cellpadding="10" style="margin:auto;">
+    <tr>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Category</th>
+        <th>Note</th>
+    </tr>
+    {% for e in latest_expenses %}
+    <tr>
+        <td>{{ e[0] }}</td>
+        <td>₹ {{ e[1] }}</td>
+        <td>{{ e[2] }}</td>
+        <td>{{ e[3] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endif %}
+
+{% endblock %}

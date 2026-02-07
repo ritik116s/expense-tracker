@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Expenses{% endblock %}
+
+{% block content %}
+<h2>Your Expenses</h2>
+
+<table border="1" cellpadding="10">
+    <tr>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Category</th>
+        <th>Note</th>
+        <th>Action</th>
+    </tr>
+
+    {% for e in expenses %}
+    <tr>
+        <td>{{ e[1] }}</td>
+        <td>₹ {{ e[2] }}</td>
+        <td>{{ e[3] }}</td>
+        <td>{{ e[4] }}</td>
+        <td>
+            <a href="/delete-expense/{{ e[0] }}" onclick="return confirm('Delete this expense?')">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% if expenses|length == 0 %}
+<p>No expenses added yet.</p>
+{% endif %}
+
+{% endblock %}

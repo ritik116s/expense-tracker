@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{% block title %}Expense Tracker{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <nav>
+        <a href="/">Home</a>
+
+        {% if session.get("user_id") %}
+        <a href="/dashboard">Dashboard</a>
+        <a href="/add-expense">Add Expense</a>
+        <a href="/expenses">View Expenses</a>
+
+        <a href="/logout">Logout</a>
+        {% else %}
+        <a href="/register">Register</a>
+        <a href="/login">Login</a>
+        {% endif %}
+    </nav>
+
+
+    <div class="container">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, msg in messages %}
+        <p class="alert {{ category }}">{{ msg }}</p>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+</body>
+
+</html>
